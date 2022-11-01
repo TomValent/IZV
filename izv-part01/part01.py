@@ -33,12 +33,7 @@ def generate_graph(a: List[float], show_figure: bool = False, save_path: str | N
         plt.plot(x, y, label = r"$y_{" + str(i) + r"}(x)$")
 
 
-    ax = plt.subplot()
-    ax.spines["top"].set_bounds(-3, 4.1)
-    ax.spines["bottom"].set_bounds(-3, 4.1)
-    ax.spines["right"].set_position(("axes", 1.12))
-    ax.spines["left"].set_position(("axes", 0.046))
-
+    plt.xlim([-3, 4.2])
     plt.ylim((-20,20))
     plt.xlabel("$x$")
     plt.ylabel("$f_a(x)$")
@@ -55,8 +50,41 @@ def generate_graph(a: List[float], show_figure: bool = False, save_path: str | N
     plt.close()
 
 
-def generate_sinus(show_figure: bool=False, save_path: str | None=None):
-    pass
+def generate_sinus(show_figure: bool=False, save_path: str | None=None):    
+    fig, axes = plt.subplots(ncols=1, nrows=3, constrained_layout=True, figsize=(6, 12))
+
+    ax1, ax2, ax3 = axes
+
+    x = np.linspace(0, 100, 1000)
+
+    y1 = 0.5 * np.sin(1/50 * np.pi * x) #2 - perioda 
+    y2 = 0.25 * np.sin(np.pi * x)
+    ysum = y1 + y2
+
+    ax1.set_xlim((0, 100))
+    ax2.set_xlim((0, 100))
+    ax3.set_xlim((0, 100))
+
+    ax1.set_xlabel("$t$")
+    ax1.set_ylabel("$f_1(x)$")
+    ax2.set_xlabel("$t$")
+    ax2.set_ylabel("$f_2(x)$")
+    ax3.set_xlabel("$t$")
+    ax3.set_ylabel("$f_1(x) + f_2(x)$")
+
+    ax1.axis(ymin=-0.8, ymax=0.8)
+    ax2.axis(ymin=-0.8, ymax=0.8)
+    ax3.axis(ymin=-0.8, ymax=0.8)
+
+    ax1.plot(x, y1)
+    ax2.plot(x, y2)
+    ax3.plot(x, ysum, color="green")
+
+    if save_path:
+        fig.savefig(save_path)
+
+    if show_figure:
+        plt.show()
 
 
 def download_data(url="https://ehw.fit.vutbr.cz/izv/temp.html"):

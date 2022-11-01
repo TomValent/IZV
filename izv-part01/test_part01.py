@@ -34,7 +34,7 @@ def test_generate_fn():
 
 def test_generate_sin():
     """Test generovani grafu se sinusovkami"""
-    part01.generate_sinus(show_figure=False, save_path="tmp_sin.png")
+    part01.generate_sinus(show_figure=True, save_path="tmp_sin.png")
     assert os.path.exists("tmp_sin.png")
 
 
