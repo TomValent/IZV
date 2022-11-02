@@ -49,6 +49,14 @@ def generate_graph(a: List[float], show_figure: bool = False, save_path: str | N
 
     plt.close()
 
+#TODO comments
+"""
+Few sentences that explain the function. 
+
+:param x: What is it?
+:param y: What is it?
+:return: What it returns?
+"""
 
 def generate_sinus(show_figure: bool=False, save_path: str | None=None):    
     fig, axes = plt.subplots(ncols=1, nrows=3, constrained_layout=True, figsize=(6, 12))
@@ -79,6 +87,9 @@ def generate_sinus(show_figure: bool=False, save_path: str | None=None):
     ax1.plot(x, y1)
     ax2.plot(x, y2)
     ax3.plot(x, ysum, color="green")
+    
+    mask = np.ma.masked_greater(ysum, y1)
+    ax3.plot(x, mask, color="red")
 
     if save_path:
         fig.savefig(save_path)
