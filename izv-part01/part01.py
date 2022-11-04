@@ -8,7 +8,6 @@ Nezapomente na to, ze python soubory maji dane formatovani.
 Muzete pouzit libovolnou vestavenou knihovnu a knihovny predstavene na prednasce
 """
 
-
 from bs4 import BeautifulSoup
 import requests
 import numpy as np
@@ -22,19 +21,18 @@ def integrate(x: np.array, y: np.array) -> float:
     return np.sum(xPart * yPart)
 
 
-def generate_graph(a: List[float], show_figure: bool = False, save_path: str | None=None):
-    plt.figure(figsize=(6,4))
+def generate_graph(a: List[float], show_figure: bool = False, save_path: str | None = None):
+    plt.figure(figsize=(6, 4))
     for i in a:
         x = np.linspace(-3.0, 3.0)
         y = np.multiply(i, np.multiply(x, x))
         plt.fill_between(x, y, alpha=0.1)
         plt.annotate(r"$\int f_{" + str(i) + r"}(x)dx$", xy=(3.01, np.multiply(i, np.multiply(3, 3)) - 0.5))
 
-        plt.plot(x, y, label = r"$y_{" + str(i) + r"}(x)$")
+        plt.plot(x, y, label=r"$y_{" + str(i) + r"}(x)$")
 
-
-    plt.xlim([-3, 4.2])
-    plt.ylim((-20,20))
+    plt.xlim((-3, 4.2))
+    plt.ylim((-20, 20))
     plt.xlabel("$x$")
     plt.ylabel("$f_a(x)$")
 
@@ -49,25 +47,17 @@ def generate_graph(a: List[float], show_figure: bool = False, save_path: str | N
 
     plt.close()
 
-#TODO comments
-"""
-Few sentences that explain the function. 
 
-:param x: What is it?
-:param y: What is it?
-:return: What it returns?
-"""
-
-def generate_sinus(show_figure: bool=False, save_path: str | None=None):    
+def generate_sinus(show_figure: bool = False, save_path: str | None = None):
     fig, axes = plt.subplots(ncols=1, nrows=3, constrained_layout=True, figsize=(6, 12))
 
     ax1, ax2, ax3 = axes
 
     x = np.linspace(0, 100, 1000)
 
-    y1 = 0.5 * np.sin(1/50 * np.pi * x) #2 - perioda 
+    y1 = 0.5 * np.sin(1 / 50 * np.pi * x)  # 2 - perioda
     y2 = 0.25 * np.sin(np.pi * x)
-    ysum = y1 + y2
+    ySum = y1 + y2
 
     ax1.set_xlim((0, 100))
     ax2.set_xlim((0, 100))
@@ -86,9 +76,9 @@ def generate_sinus(show_figure: bool=False, save_path: str | None=None):
 
     ax1.plot(x, y1)
     ax2.plot(x, y2)
-    ax3.plot(x, ysum, color="green")
-    
-    mask = np.ma.masked_greater(ysum, y1)
+    ax3.plot(x, ySum, color="green")
+
+    mask = np.ma.masked_greater(ySum, y1)
     ax3.plot(x, mask, color="red")
 
     if save_path:
@@ -99,8 +89,29 @@ def generate_sinus(show_figure: bool=False, save_path: str | None=None):
 
 
 def download_data(url="https://ehw.fit.vutbr.cz/izv/temp.html"):
-    pass
+    r = requests.get("https://ehw.fit.vutbr.cz/izv/temp.html", allow_redirects=True)
+    content = BeautifulSoup(r.text, "html.parser")
+    rows = content.find_all("tr")
+    data = []
+
+    for tr in rows:
+        raw_data = np.array([float(i.p.string.replace(",", ".")) for i in tr.find_all("td") if i.p is not None])
+
+        data.append({
+            "year": int(raw_data[0]),
+            "month": int(raw_data[1]),
+            "temp": raw_data[2:]
+        })
+
+    return data
 
 
 def get_avg_temp(data, year=None, month=None) -> float:
-    pass
+    if year:
+        data = filter(lambda x: x["year"] == year, data)
+    if month:
+        data = filter(lambda x: x["month"] == month, data)
+
+    data = list(data)
+
+    return np.sum([np.sum(i["temp"]) for i in data]) / np.sum([len(i["temp"]) for i in data])
