@@ -109,6 +109,8 @@ def generate_sinus(show_figure: bool = False, save_path: str | None = None):
     if show_figure:
         plt.show()
 
+    plt.close()
+
 """
 Funkcia k úlohe 4. Zťahovanie a ukladanie dát z internetu. 
 
