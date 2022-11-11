@@ -42,11 +42,11 @@ def generate_graph(a: List[float], show_figure: bool = False, save_path: str | N
         x = np.linspace(-3.0, 3.0)
         y = np.multiply(i, np.multiply(x, x))
         plt.fill_between(x, y, alpha=0.1)
-        plt.annotate(r"$\int f_{" + str(i) + r"}(x)dx$", xy=(3.01, np.multiply(i, np.multiply(3, 3)) - 0.5))
+        plt.annotate(r"$\int f_{" + str(i) + r"}(x)dx$", xy=(3.01, np.multiply(i, np.multiply(3, 3)) - 0.5), size=8)
 
         plt.plot(x, y, label=r"$y_{" + str(i) + r"}(x)$")
 
-    plt.xlim((-3, 4.2))
+    plt.xlim((-3, 3.99))
     plt.ylim((-20, 20))
     plt.xlabel("$x$")
     plt.ylabel("$f_a(x)$")
