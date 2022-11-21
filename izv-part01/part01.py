@@ -14,29 +14,31 @@ import numpy as np
 import matplotlib.pyplot as plt
 from typing import List
 
-"""
-Funkcia k úlohe 1. Výpočet itegrálu lichobežníkovou motódou. 
 
-:param x: Vektor integračných boodv
-:param y: Hodnota integrovanej funkcie
-
-:return: Hodnota vypočíaného integrálu
-"""
 def integrate(x: np.array, y: np.array) -> float:
+    """
+    Funkcia k úlohe 1. Výpočet itegrálu lichobežníkovou motódou. 
+
+    :param x: Vektor integračných boodv
+    :param y: Hodnota integrovanej funkcie
+
+    :return: Hodnota vypočíaného integrálu
+    """
     yPart = (y[1:] + y[:-1]) / 2
     xPart = x[1:] - x[:-1]
     return np.sum(xPart * yPart)
 
-"""
-Funkcia k úlohe 2. Generovanie grafov s rôznymi koeficientami.
 
-:param a: Koeficienty
-:param show_figure Určuje, či sa má graf zobraziť po spustení 
-:param save_path Určuje, kam sa má graf uložiť ak je zadaná 
-
-:return: Nothing
-"""
 def generate_graph(a: List[float], show_figure: bool = False, save_path: str | None = None):
+    """
+    Funkcia k úlohe 2. Generovanie grafov s rôznymi koeficientami.
+
+    :param a: Koeficienty
+    :param show_figure Určuje, či sa má graf zobraziť po spustení 
+    :param save_path Určuje, kam sa má graf uložiť ak je zadaná 
+
+    :return: Nothing
+    """
     plt.figure(figsize=(6, 4))
     for i in a:
         x = np.linspace(-3.0, 3.0)
@@ -62,20 +64,21 @@ def generate_graph(a: List[float], show_figure: bool = False, save_path: str | N
 
     plt.close()
 
-"""
-Funkcia k úlohe 3. Generovanie grafov sínusových signálov.
 
-:param show_figure Určuje, či sa má graf zobraziť po spustení 
-:param save_path Určuje, kam sa má graf uložiť ak je zadaná 
-
-:return: Nothing
-"""
 def generate_sinus(show_figure: bool = False, save_path: str | None = None):
+    """
+    Funkcia k úlohe 3. Generovanie grafov sínusových signálov.
+
+    :param show_figure Určuje, či sa má graf zobraziť po spustení 
+    :param save_path Určuje, kam sa má graf uložiť ak je zadaná 
+
+    :return: Nothing
+    """
     fig, axes = plt.subplots(ncols=1, nrows=3, constrained_layout=True, figsize=(6, 12))
 
     ax1, ax2, ax3 = axes
 
-    x = np.linspace(0, 100, 1000)
+    x = np.linspace(0, 100, 10000)
 
     y1 = 0.5 * np.sin(1 / 50 * np.pi * x)  # 2 - perioda
     y2 = 0.25 * np.sin(np.pi * x)
@@ -111,14 +114,15 @@ def generate_sinus(show_figure: bool = False, save_path: str | None = None):
 
     plt.close()
 
-"""
-Funkcia k úlohe 4. Zťahovanie a ukladanie dát z internetu. 
 
-:param url: URL adresa zdroja
-
-:return: pole stiahnutých dát
-"""
 def download_data(url="https://ehw.fit.vutbr.cz/izv/temp.html"):
+    """
+    Funkcia k úlohe 4. Zťahovanie a ukladanie dát z internetu. 
+
+    :param url: URL adresa zdroja
+
+    :return: pole stiahnutých dát
+    """
     r = requests.get(url, allow_redirects=True)
     content = BeautifulSoup(r.text, "html.parser")
     rows = content.find_all("tr")
@@ -135,16 +139,17 @@ def download_data(url="https://ehw.fit.vutbr.cz/izv/temp.html"):
 
     return data
 
-"""
-Funkcia k úlohe 5.
 
-:param data: stiahnuté dáta z úlohy 4
-:param year: ak je zadaný, filtujeme podľa daného roku
-:param month: ak je zadaný, filtrujeme podľa daného mesiaca
-
-:return: Priemernú teplotu v danom období
-"""
 def get_avg_temp(data, year=None, month=None) -> float:
+    """
+    Funkcia k úlohe 5.
+
+    :param data: stiahnuté dáta z úlohy 4
+    :param year: ak je zadaný, filtujeme podľa daného roku
+    :param month: ak je zadaný, filtrujeme podľa daného mesiaca
+
+    :return: Priemernú teplotu v danom období
+    """
     if year:
         data = filter(lambda x: x["year"] == year, data)
     if month:
