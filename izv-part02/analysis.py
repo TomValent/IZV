@@ -16,7 +16,7 @@ def load_data(filename : str) -> pd.DataFrame:
     headers = ["p1", "p36", "p37", "p2a", "weekday(p2a)", "p2b", "p6", "p7", "p8", "p9", "p10", "p11", "p12", "p13a",
                 "p13b", "p13c", "p14", "p15", "p16", "p17", "p18", "p19", "p20", "p21", "p22", "p23", "p24", "p27", "p28",
                 "p34", "p35", "p39", "p44", "p45a", "p47", "p48a", "p49", "p50a", "p50b", "p51", "p52", "p53", "p55a",
-                "p57", "p58", "a", "b", "d", "e", "f", "g", "h", "i", "j", "k", "l", "n", "o", "p", "q", "r", "s", "t", "p5a"]
+                "p57", "p58", "a", "b", "d", "e", "f", "g", "h", "i", "j", "k", "l", "n", "o", "p", "q", "r", "s", "t", "p5a", "region"]
 
     #def get_dataframe(filename: str, verbose: bool = False) -> pd.DataFrame:
     regions = {
@@ -36,16 +36,23 @@ def load_data(filename : str) -> pd.DataFrame:
         "KVK": "19",
     }
 
-    filename = "http://ehw.fit.vutbr.cz/izv/data.zip"
-    zip_obj = zipfile.ZipFile(filename, "w")
+    root = zipfile.ZipFile(filename, "r")
+    df = pd.DataFrame()
 
-    #zip_obj.namelist.zfile.open(name).ZipFill.namelist.read_csv
+    for i in range(0, len(root.filelist)):
+        nestedFile = root.filelist[i];
+        fileData = zipfile.ZipFile(root.open(nestedFile))
+        
+        for j in range(0, len(fileData.filelist)):
+            csvFile = fileData.filelist[j]
+            csv = fileData.open(csvFile)
+            if csv.name != "CHODCI.csv":
+                csvObj = pd.read_csv(csv, encoding="cp1250", delimiter=";", low_memory=False, names=headers)
+                df = pd.concat([df, csvObj])
 
+        fileData.close()
 
-    data = {}
-    df = pd.DataFrame(data=data)
-
-    zip_obj.close()
+    root.close()
     return df
 
 # Ukol 2: zpracovani dat
