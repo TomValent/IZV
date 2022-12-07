@@ -36,6 +36,8 @@ def load_data(filename : str) -> pd.DataFrame:
         "KVK": "19",
     }
 
+    dictionary = {f"{value}.csv": key for (key, value) in regions.items()}
+
     root = zipfile.ZipFile(filename, "r")
     df = pd.DataFrame()
 
@@ -46,9 +48,12 @@ def load_data(filename : str) -> pd.DataFrame:
         for j in range(0, len(fileData.filelist)):
             csvFile = fileData.filelist[j]
             csv = fileData.open(csvFile)
-            if csv.name != "CHODCI.csv":
+
+            if csv.name != "CHODCI.csv" and csv.name in dictionary.keys():
                 csvObj = pd.read_csv(csv, encoding="cp1250", delimiter=";", low_memory=False, names=headers)
                 df = pd.concat([df, csvObj])
+
+                df["region"] = dictionary[csv.name]
 
         fileData.close()
 
