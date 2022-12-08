@@ -62,7 +62,29 @@ def load_data(filename : str) -> pd.DataFrame:
 
 # Ukol 2: zpracovani dat
 def parse_data(df : pd.DataFrame, verbose : bool = False) -> pd.DataFrame:
-    pass
+    if verbose:
+        print(f"orig_size={df.memory_usage(index=True, deep=True).sum() / (10 ** 6):.1f} MB")
+
+    df = df.drop_duplicates(subset=["p1"])
+    df2 = df.copy()
+
+    df2["p2a"] = pd.to_datetime(df2["p2a"])
+    df2.rename(columns={"p2a": "date"}, inplace=True)
+
+    df2_headers = list(df2)
+    df2_headers.pop()
+    floatCols = ['d', 'e']
+
+    for header in df2_headers:
+        if header in floatCols:
+            df2[header] = df2[header].str.replace(',', '.').apply(pd.to_numeric, errors="coerce")
+        else:
+            df2[df2_headers] = df2[df2_headers].astype("category")
+
+    if verbose:
+        print(f"new_size={df2.memory_usage(index=True, deep=True).sum() / (10 ** 6):.1f} MB")
+
+    
 
 # Ukol 3: počty nehod v jednotlivých regionech podle viditelnosti
 def plot_visibility(df: pd.DataFrame, fig_location: str = None,
