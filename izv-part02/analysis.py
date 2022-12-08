@@ -84,6 +84,7 @@ def parse_data(df : pd.DataFrame, verbose : bool = False) -> pd.DataFrame:
     if verbose:
         print(f"new_size={df2.memory_usage(index=True, deep=True).sum() / (10 ** 6):.1f} MB")
 
+    return df2
     
 
 # Ukol 3: počty nehod v jednotlivých regionech podle viditelnosti
@@ -99,14 +100,28 @@ def plot_direction(df: pd.DataFrame, fig_location: str = None,
 # Ukol 5: Následky v čase
 def plot_consequences(df: pd.DataFrame, fig_location: str = None,
                     show_figure: bool = False):
-    pass
+    
+    regs = ["PHA", "STC", "JHC", "PLK"]
+
+    df = df.loc[df['region'].isin(regs)]
+
+    sns.set(rc={'axes.facecolor': '#eaeaf2'})
+    fig, axes = plt.subplots(2, 2, figsize=(11.69, 8.27))
+    fig.suptitle("Kraj")
+    ax = axes.flat
+
+    if fig_location:
+        plt.savefig(fig_location)
+
+    if show_figure:
+        plt.show()
 
 if __name__ == "__main__":
     # zde je ukazka pouziti, tuto cast muzete modifikovat podle libosti
     # skript nebude pri testovani pousten primo, ale budou volany konkreni 
     # funkce.
     df = load_data("data/data.zip")
-    df2 = parse_data(df, True)
+    df2 = parse_data(df, False)
     
     plot_visibility(df2, "01_visibility.png")
     plot_direction(df2, "02_direction.png", True)
