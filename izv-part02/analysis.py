@@ -13,6 +13,14 @@ import zipfile
 
 # Ukol 1: nacteni dat ze ZIP souboru
 def load_data(filename: str) -> pd.DataFrame:
+    """
+    Funkcia k úlohe 1. Funkcia načítava dáta zo zipov z csv súborov a ukladá
+    ich do dataframe.
+
+    :param filename: cesta k súboru s dátami
+
+    :return: Dataframe s pridaným stlpcom region
+    """
     # tyto konstanty nemente, pomuzou vam pri nacitani
     headers = ["p1", "p36", "p37", "p2a", "weekday(p2a)", "p2b", "p6", "p7", "p8", "p9", "p10", "p11", "p12", "p13a",
                "p13b", "p13c", "p14", "p15", "p16", "p17", "p18", "p19", "p20", "p21", "p22", "p23", "p24", "p27",
@@ -66,6 +74,15 @@ def load_data(filename: str) -> pd.DataFrame:
 
 # Ukol 2: zpracovani dat
 def parse_data(df: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:
+    """
+    Funkcia k úlohe 2. Funkcia počíta velkost použitej pamäte a vymazáva duplicity stlpca p1,
+    premenováva stlpec 'p2a' na 'date' a meni datovy typ hodnot podla potreby.
+
+    :param df: dataframe s udajmi
+    :param verbose: parameter na zobrazenie velkosti pouzitej pamati
+
+    :return: Upravený dataframe
+    """
     if verbose:
         print(f"orig_size={df.memory_usage(index=True, deep=True).sum() / (10 ** 6):.1f} MB")
 
@@ -94,6 +111,13 @@ def parse_data(df: pd.DataFrame, verbose: bool = False) -> pd.DataFrame:
 # Ukol 3: po�ty nehod v jednotliv�ch regionech podle viditelnosti
 def plot_visibility(df: pd.DataFrame, fig_location: str = None,
                     show_figure: bool = False):
+    """
+    Funkcia k úlohe 3. Vytvára graf počtu nehôd z dataframe, ktorý vráti funkcia parse_data.
+
+    :param df: dataframe s udajmi
+    :param fig_location: miesto kam sa graf ulozi
+    :param show_figure: parameter na zobrazenie grafu pri spusteni
+    """
     dictionary = {1: "ve dne - nezhorsena", 2: "ve dne - zhorsena", 3: "ve dne - zhorsena",
                   4: "v noci - nezhorsena", 5: "v noci - zhorsena", 6: "v noci - nezhorsena", 7: "v noci - zhorsena"}
 
@@ -125,6 +149,13 @@ def plot_visibility(df: pd.DataFrame, fig_location: str = None,
 # Ukol4: druh sr�ky jedouc�ch vozidel
 def plot_direction(df: pd.DataFrame, fig_location: str = None,
                    show_figure: bool = False):
+    """
+    Funkcia k úlohe 4. Vytvára graf k druhom zrážok vozidiel z dataframe, ktorý vráti funkcia parse_data.
+
+    :param df: dataframe s udajmi
+    :param fig_location: miesto kam sa graf ulozi
+    :param show_figure: parameter na zobrazenie grafu pri spusteni
+    """
     dictionary = {1: "celni", 2: "bocni", 3: "bocni", 4: "zezadu", 0: "0"}
 
     sns.set_style("darkgrid")
@@ -165,7 +196,14 @@ def plot_direction(df: pd.DataFrame, fig_location: str = None,
 # Ukol 5: N�sledky v �ase
 def plot_consequences(df: pd.DataFrame, fig_location: str = None,
                       show_figure: bool = False):
-    regs = ["PHA", "STC", "JHC", "PLK"]
+    """
+    Funkcia k úlohe 5. Vytvára graf počtu nehôd v jednotlivých regiónoch zobrazujúci následky zrážky v čase
+    z dataframe, ktorý vráti funkcia parse_data.
+
+    :param df: dataframe s udajmi
+    :param fig_location: miesto kam sa graf ulozi
+    :param show_figure: parameter na zobrazenie grafu pri spusteni
+    """
     sns.set(rc={"axes.facecolor": "#eaeaf2"})
 
     fig, axes = plt.subplots(2, 2, figsize=(12, 8))
