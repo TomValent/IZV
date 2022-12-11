@@ -219,8 +219,8 @@ def plot_consequences(df: pd.DataFrame, fig_location: str = None,
     values = list()
 
     for i in range(0, len(data)):
-        if df.iloc[i, 13] == 0:  # p13a
-            if df.iloc[i, 14] == 0:  # p13b
+        if df.iloc[i, 13] == 0:                 # p13a
+            if df.iloc[i, 14] == 0:             # p13b
                 values.append("lahke zraneni")  # p13c
             else:
                 values.append("tazke zdraneni")
@@ -228,6 +228,8 @@ def plot_consequences(df: pd.DataFrame, fig_location: str = None,
             values.append("smrt")
 
     data["nasledky"] = values
+
+    data = pd.pivot_table(data, columns='consequences', index=['date', 'region'], aggfunc='size', fill_value=0)
 
     if fig_location:
         plt.savefig(fig_location)
