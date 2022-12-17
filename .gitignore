@@ -1,7 +1,10 @@
 ./idea/*
+.idea/*
 izv-part01/.idea/*
 izv-part01/.pytest_cache/*
 izv-part01/__pycache__/part01.cpython-310.pyc
 izv-part02/.idea/*
 izv-part02/.pytest_cache/*
 izv-part02/__pycache__/part02.cpython-310.pyc
+izv-part02/data/*
+izv-part03/accidents.pkl.gz
