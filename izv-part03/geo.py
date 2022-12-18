@@ -24,15 +24,14 @@ def make_geo(df: pd.DataFrame) -> geopandas.GeoDataFrame:
     gdf = None
 
     try:
-        gdf = geopandas.GeoDataFrame(df,
-            geometry=geopandas.points_from_xy(df["d"], df["e"]),
-            crs="EPSG:5514")
-    except:
+        gdf = geopandas.GeoDataFrame(df, geometry=geopandas.points_from_xy(df["d"], df["e"]), crs="EPSG:5514")
+    except geopandas:
         print("Error in converting dataframe.\n")
         exit(1)
     
     return gdf
-    
+
+
 def plot_geo(gdf: geopandas.GeoDataFrame, fig_location: str = None,
              show_figure: bool = False):
     """
@@ -49,7 +48,6 @@ def plot_geo(gdf: geopandas.GeoDataFrame, fig_location: str = None,
     gdfNew["p2a"] = pd.to_datetime(gdfNew["p2a"], cache=True)
     regi = "PHA"
 
-
     gdf1 = gdfNew
     gdf2 = gdfNew
     gdf3 = gdfNew
@@ -60,8 +58,10 @@ def plot_geo(gdf: geopandas.GeoDataFrame, fig_location: str = None,
     fig, axes = plt.subplots(2, 2, figsize=(16, 9))
 
     for year, ax, gdf in zip(years, axes.flat, gdfs):
-        ax = gdf[(gdfNew["p2a"].dt.year == year) & (gdfNew["region"] == regi)].centroid.plot(ax=ax, markersize=4, color="red", alpha=0.8)
-        ctx.add_basemap(ax,crs=gdf.crs.to_string(), source=ctx.providers.Stamen.TonerLite)
+        ax = gdf[(gdfNew["p2a"].dt.year == year) & (gdfNew["region"] == regi)].centroid.plot(ax=ax,
+                                                                                             markersize=4,
+                                                                                             color="red", alpha=0.8)
+        ctx.add_basemap(ax, crs=gdf.crs.to_string(), source=ctx.providers.Stamen.TonerLite)
         ax.set_title(regi + " kraj " + str(year))
         ax.axis("off")
 
@@ -72,7 +72,6 @@ def plot_geo(gdf: geopandas.GeoDataFrame, fig_location: str = None,
         plt.show()
 
     plt.close()
-
 
 
 def plot_cluster(gdf: geopandas.GeoDataFrame, fig_location: str = None,
@@ -91,7 +90,8 @@ def plot_cluster(gdf: geopandas.GeoDataFrame, fig_location: str = None,
     
     regi = "JHC"
 
-    gdf = gdf[(gdf["region"] == regi) & (gdf["p36"] >= 1) & (gdf["p36"] <= 3)].set_geometry(gdf.centroid).to_crs("EPSG:3857")
+    gdf = gdf[(gdf["region"] == regi) & (gdf["p36"] >= 1) &
+              (gdf["p36"] <= 3)].set_geometry(gdf.centroid).to_crs("EPSG:3857")
     coords = np.dstack([gdf.geometry.x, gdf.geometry.y]).reshape(-1, 2)
 
     # Pouzijem metodu K-means, metodu ucenia sa bez ucitela, pocet clusterov som zvolil 10 experimentalne
@@ -102,8 +102,8 @@ def plot_cluster(gdf: geopandas.GeoDataFrame, fig_location: str = None,
     gdfNew["cluster"] = model.labels_
     gdfNew = gdfNew.dissolve(by="cluster", aggfunc={"region": "count"}).rename(columns={"region": "count"})
 
-    gdf_coords = geopandas.GeoDataFrame(
-    geometry=geopandas.points_from_xy(model.cluster_centers_[:, 0], model.cluster_centers_[:, 1]))
+    gdf_coords = geopandas.GeoDataFrame(geometry=geopandas.points_from_xy(model.cluster_centers_[:, 0],
+                                                                          model.cluster_centers_[:, 1]))
     gdfMerged = gdfNew.merge(gdf_coords, left_on="cluster", right_index=True).set_geometry("geometry_y")
 
     plt.figure(figsize=(16, 9))
@@ -112,7 +112,7 @@ def plot_cluster(gdf: geopandas.GeoDataFrame, fig_location: str = None,
     ax.set_title("Nehody v " + regi + " kraji na silnicich 1., 2. a 3. tridy")
 
     gdf.plot(ax=ax, color="tab:grey", alpha=0.5, markersize=1)
-    gdfMerged.plot(ax=ax, markersize=gdfNew["count"] , column="count", legend=True, alpha=0.4)
+    gdfMerged.plot(ax=ax, markersize=gdfNew["count"], column="count", legend=True, alpha=0.4)
     ctx.add_basemap(ax, crs="epsg:3857", source=ctx.providers.Stamen.TonerLite, alpha=0.6)
 
     if fig_location:
