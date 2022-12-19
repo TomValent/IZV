@@ -1,16 +1,17 @@
 #!/usr/bin/python3.10
-# -*- coding: utf-8 -*-
+# coding=utf-8
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 import numpy as np
 
 def getDataframe(filename: str) -> pd.DataFrame:
     """
-    Funkcia k ˙lohe 3. NaËÌta a uloæÌ d·ta zo zadanÈho s˙boru
+    Funkcia k √∫lohe 3. Naƒç√≠ta a ulo≈æ√≠ d√°ta zo zadan√©ho s√∫boru
 
-    :param filename: n·zov s˙boru
+    :param filename: n√°zov s√∫boru
 
-    :return: v˝sledn˝ dataframe
+    :return: v√Ωsledn√Ω dataframe
     """
     df = pd.read_pickle(filename)
 
@@ -22,14 +23,14 @@ def getDataframe(filename: str) -> pd.DataFrame:
 
 def plotFig(df: pd.DataFrame, fig_location: str, show_figure: bool):
     """
-    Funkcia k ˙lohe 3. Vytv·ra graf k druhom zr·æok vozidiel z dataframe, ktor˝ vr·ti funkcia getDataframe.
+    Funkcia k √∫lohe 3. Vytv√°ra graf k druhom zr√°≈æok vozidiel z dataframe, ktor√Ω vr√°ti funkcia getDataframe.
 
     :param df: dataframe s udajmi
     :param fig_location: miesto kam sa graf ulozi
     :param show_figure: parameter na zobrazenie grafu pri spusteni
     """
 
-    dictionary = {1: "celni", 2: "bocni", 3: "bocni", 4: "zezadu", 0: "0"}
+    dictionary = {1: "ƒçeln√≠", 2: "boƒçn√≠", 3: "boƒçn√≠", 4: "zezadu", 0: "0"}
 
     sns.set_style("darkgrid")
 
@@ -47,16 +48,15 @@ def plotFig(df: pd.DataFrame, fig_location: str, show_figure: bool):
                     hue="p7", data=data, legend=True, kind="bar")
 
     g.set_titles("Kraj: {col_name}")
-    g.legend.set_title("Druh srazky")
+    g.legend.set_title("Druh sr√°≈æky")
     g.legend.set_frame_on(True)
 
     for axe in g.axes.flat:
-        axe.set_xlabel("Mesic")
-        axe.set_ylabel("Pocet nehod")
+        axe.set_xlabel("Mes√≠c")
+        axe.set_ylabel("Poƒçet nehod")
 
     g.tight_layout()
 
-    # save and show graph
     if fig_location:
         plt.savefig(fig_location)
 
@@ -72,5 +72,5 @@ def plotTable(df: pd.DataFrame):
 
 if __name__ == "__main__":  
     df = getDataframe("accidents.pkl.gz")
-    plotFig(df, fig_location="fig.pdf", show_figure=True)
+    plotFig(df, fig_location="fig.png", show_figure=True)
     plotTable(df)
