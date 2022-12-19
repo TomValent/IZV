@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 
+
 def getDataframe(filename: str) -> pd.DataFrame:
     """
     Funkcia k úlohe 3. Načíta a uloží dáta zo zadaného súboru
@@ -81,11 +82,11 @@ def printCSVTable(table: pd.DataFrame, printAsTable: bool):
         print("======== End table =========")
         exit(0)
 
-    #print CSV header
+    # print CSV header
     print("======== Start CSV =========")
     print("Type;Year;Count")
 
-    #print data
+    # print data
     for index, row in table.iterrows():
         for year in table:
             print(str(index) + ";" + str(year[1]) + ";" + str(row[year]))
